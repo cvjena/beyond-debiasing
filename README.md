@@ -3,7 +3,7 @@
 ## Overview
 This repository provides code to use the method presented in our GCPR 2023 paper **"Beyond Debiasing: Actively Steering Feature Selection via Loss Regularization"**. If you want to get started, take a look at our [example network](regression_network.py) and the corresponding [jupyter notebook](feature_steering_example.ipynb).
 
-<div style="text-align:center">
+<div align="center">
     <img src="https://git.inf-cv.uni-jena.de/blunk/beyond-debiasing/raw/main/teaser.png" alt="By measuring the feature usage, we can steer the model towards (not) using features that are specifically (un-)desired." width="35%"/>
 </div>
 
