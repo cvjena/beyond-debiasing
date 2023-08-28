@@ -1,10 +1,10 @@
 # Beyond Debiasing: Actively Steering Feature Selection via Loss Regularization
 
 ## Overview
-This repository provides code to use the method presented in our GCPR 2023 paper **"Beyond Debiasing: Actively Steering Feature Selection via Loss Regularization"**. If you want to get started, take a look at our [example network](https://git.inf-cv.uni-jena.de/blunk/beyond-debiasing/src/main/regression_network.py) and the corresponding [jupyter notebook](https://git.inf-cv.uni-jena.de/blunk/beyond-debiasing/src/main/feature_steering_example.ipynb).
+This repository provides code to use the method presented in our GCPR 2023 paper **"Beyond Debiasing: Actively Steering Feature Selection via Loss Regularization"**. If you want to get started, take a look at our [example network](regression_network.py) and the corresponding [jupyter notebook](feature_steering_example.ipynb).
 
 <div style="text-align:center">
-<img src="teaser.png" alt="By measuring the feature usage, we can steer the model towards (not) using features that are specifically (un-)desired." width="55%"/>
+    <img src="https://git.inf-cv.uni-jena.de/blunk/beyond-debiasing/raw/main/teaser.png" alt="By measuring the feature usage, we can steer the model towards (not) using features that are specifically (un-)desired." width="35%"/>
 </div>
 
 Our method generalizes from debiasing to the **encouragement and discouragement of arbitrary features**. That is, it not only aims at removing the influence of undesired features / biases but also at increasing the influence of features that are known to be well-established from domain knowledge.
@@ -28,7 +28,7 @@ If you use our method, please cite:
 First, create an environment with pip and Python first (Anaconda environment / Python virtual environment). We recommend to install [PyTorch with CUDA support](https://pytorch.org/get-started/locally/). Then, you can install all subsequent packages via pip as described above.
 
 ## Usage in Python
-Since our method relies on loss regularization, it is very simple to add to your own networks - you only need to modify your loss function. To help with that, we provide an [exemplary network](https://git.inf-cv.uni-jena.de/blunk/beyond-debiasing/src/main/regression_network.py) and a [jupyter notebook](https://git.inf-cv.uni-jena.de/blunk/beyond-debiasing/src/main/feature_steering_example.ipynb) with example code.
+Since our method relies on loss regularization, it is very simple to add to your own networks - you only need to modify your loss function. To help with that, we provide an [exemplary network](regression_network.py) and a [jupyter notebook](feature_steering_example.ipynb) with example code.
 
 ## Repository Organization
 * Installation:
