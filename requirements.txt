@@ -1,0 +1,8 @@
+acd
+jupyterlab
+numpy
+scikit-learn
+torch
+torchaudio
+torchvision
+torchmetrics

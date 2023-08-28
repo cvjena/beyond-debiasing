@@ -1,7 +1,7 @@
 import os
 import numpy as np
-from toy_data.algebra import random_orthogonal_matrix
-from toy_data.sklearn_adaptions import make_regression
+from algebra import random_orthogonal_matrix
+from make_regression import make_regression
 from dataset_utils import get_dataset_from_arrays
 
 def make_regression_dataset(high_dim_transform=True, n_features_low_dim=4, n_uninformative_low_dim=0, n_high_dim = 128, noise_on_high_dim_snrdb=None,

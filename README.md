@@ -1,6 +1,15 @@
 # Beyond Debiasing: Actively Steering Feature Selection via Loss Regularization
 
-This repository provides code to use the method presented in our GCPR 2023 paper "Beyond Debiasing: Actively Steering Feature Selection via Loss Regularization". If you use this method, please cite:
+## Overview
+This repository provides code to use the method presented in our GCPR 2023 paper **"Beyond Debiasing: Actively Steering Feature Selection via Loss Regularization"**. If you want to get started, take a look at our [example network](https://git.inf-cv.uni-jena.de/blunk/beyond-debiasing/src/main/regression_network.py) and the corresponding [jupyter notebook](https://git.inf-cv.uni-jena.de/blunk/beyond-debiasing/src/main/feature_steering_example.ipynb).
+
+<div style="text-align:center">
+<img src="teaser.png" alt="By measuring the feature usage, we can steer the model towards (not) using features that are specifically (un-)desired." width="55%"/>
+</div>
+
+Our method generalizes from debiasing to the **encouragement and discouragement of arbitrary features**. That is, it not only aims at removing the influence of undesired features / biases but also at increasing the influence of features that are known to be well-established from domain knowledge.
+
+If you use our method, please cite:
 
     @inproceedings{Blunk23:FS,
     author = {Jan Blunk and Niklas Penzel and Paul Bodesheim and Joachim Denzler},
@@ -9,8 +18,33 @@ This repository provides code to use the method presented in our GCPR 2023 paper
     year = {2023},
     }
 
-This repository includes a Python implementation of the hybrid CMI estimator CMIh presented by [Zan et al.](https://doi.org/10.3390/e24091234) The authors' original R implementation can be found [here](https://github.com/leizan/CMIh2022). CMIh was published under the MIT license.
-
 ## Installation
-First, you have to install ACD as described in the [Repository for "Hierarchical interpretations for neural network predictions" by Singh et al.](https://github.com/csinva/hierarchical-dnn-interpretations)
+**Install with pip, Python and PyTorch 2.0+**
+
+    git clone https://git.inf-cv.uni-jena.de/blunk/beyond-debiasing.git
+    cd beyond-debiasing
+    pip install -r requirements.txt
+
+First, create an environment with pip and Python first (Anaconda environment / Python virtual environment). We recommend to install [PyTorch with CUDA support](https://pytorch.org/get-started/locally/). Then, you can install all subsequent packages via pip as described above.
+
+## Usage in Python
+Since our method relies on loss regularization, it is very simple to add to your own networks - you only need to modify your loss function. To help with that, we provide an [exemplary network](https://git.inf-cv.uni-jena.de/blunk/beyond-debiasing/src/main/regression_network.py) and a [jupyter notebook](https://git.inf-cv.uni-jena.de/blunk/beyond-debiasing/src/main/feature_steering_example.ipynb) with example code.
+
+## Repository Organization
+* Installation:
+    * [`requirements.txt`](requirements.txt): List of required packages for installation with pip
+* Feature attribution:
+    * [`contextual_decomposition.py`](contextual_decomposition.py): Wrapper for contextual decomposition
+    * [`mixed_cmi_estimator.py`](mixed_cmi_estimator.py): Python port of the CMIh estimator of the conditional 
+* Redundant regression dataset:
+    * [`algebra.py`](algebra.py): Generation of random orthogonal matrices
+    * [`make_regression.py`](make_regression.py): An adapted version of scikit-learns make_regression(...), where the coefficients are standard-uniform
+    * [`regression_dataset.py`](regression_dataset.py): Generation of the redundant regression dataset
+    * [`dataset_utils.py`](dataset_utils.py): Creation of torch dataset from numpy arrays
+    * [`tensor_utils.py`](tensor_utils.py): Some helpful functions for dealing with tensors
+* Example:
+    * [`feature_steering_example.ipynb`](feature_steering_example.ipynb): Example for generating the dataset, creating and training the network with detailed comments  
+    * [`regression_network.py`](regression_network.py): Neural network (PyTorch) used in the example notebook
+
+With [`mixed_cmi_estimator.py`](mixed_cmi_estimator.py) this repository includes a Python implementation of the hybrid CMI estimator CMIh presented by [Zan et al.](https://doi.org/10.3390/e24091234) The authors' original R implementation can be found [here](https://github.com/leizan/CMIh2022).
 
