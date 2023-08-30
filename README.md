@@ -7,7 +7,7 @@
 
 ## Overview <a name="overview"></a>
 
-This repository provides code to use the method presented in our GCPR 2023 paper **"Beyond Debiasing: Actively Steering Feature Selection via Loss Regularization"**. If you want to get started, take a look at our [example network](regression_network.py) and the corresponding [jupyter notebook](feature_steering_example.ipynb).
+This repository provides code to use the method presented in our DAGM GCPR 2023 paper **"Beyond Debiasing: Actively Steering Feature Selection via Loss Regularization"**. If you want to get started, take a look at our [example network](regression_network.py) and the corresponding [jupyter notebook](feature_steering_example.ipynb).
 
 If you are only interested in the implementation of the feature steering part of the loss, you can find it in `feat_steering_loss(...)` of [regression_network.py](regression_network.py).
 
