@@ -45,9 +45,10 @@ It was published under the following license:
 import acd
 import numpy as np
 import torch
+from torch import nn
+from typing import Tuple
 
-
-def get_cd_1d_by_modules(model, modules, inputs, feat_of_interest, device="cpu"):
+def get_cd_1d_by_modules(modules, inputs, feat_of_interest, device="cpu"):
     # Device.
     inputs = inputs.to(device)
 
@@ -73,7 +74,7 @@ def get_cd_1d_by_modules(model, modules, inputs, feat_of_interest, device="cpu")
     return relevant, irrelevant
 
 
-def get_cd_1d(model, inputs, feat_of_interest, device="cpu"):
+def get_cd_1d(model: nn.Module, inputs: torch.Tensor, feat_of_interest: torch.Tensor, device: str="cpu") -> Tuple[torch.Tensor, torch.Tensor]:
     """Calculates contextual decomposition scores for the given model.
 
     The contextual decomposition performs feature attribution by decomposing
@@ -93,18 +94,21 @@ def get_cd_1d(model, inputs, feat_of_interest, device="cpu"):
         Prediction of the Network = score of the features of interest
                                     + score of the other features
 
-    :param model: PyTorch-Model to generate the CD scores for.
-    :param inputs: Batched inputs to the model. Typically 2-dimensional tensor
-    containing the inputs for a single batch.
-    :param feat_of_interest: Integer or list of integers. Define which
-    dimensions of the input are part of the feature(s) of interest.
-    :param device: Device used by PyTorch (cuda / cpu).
-    :return: Tuple (scores_feat, scores_other). These are the scores for each
-    of the batched inputs. Here, scores_feat[i] + scores_other[i]=prediction[i].
-    Note that the feature scores are determined in a per-batch manner. Therefore,
-    the resulting feature scores are vectors.
-    :rtype: Tupel of one-dimensional tensors.
+    Args:
+        model (nn.Module): PyTorch model to generate the CD scores for.
+        inputs (torch.Tensor): Batched inputs to the model. Typically 2-dimensional
+            tensor containing the inputs for a single batch.
+        feat_of_interest (torch.Tensor): Integer or list of integers. Define which
+            dimensions of the input are part of the feature(s) of interest.
+        device (str, optional): Device used to store the PyTorch tensors
+            (cuda / cpu). Defaults to "cpu".
 
+    Returns:
+        Tuple[torch.Tensor, torch.Tensor]: Tuple (scores_feat, scores_other).
+            These are the scores for each of the batched inputs.
+            Here, scores_feat[i] + scores_other[i]=prediction[i].
+            Note that the feature scores are determined in a per-batch manner.
+            Therefore, the resulting feature scores are vectors.
     """
 
     # Set model in evaluation mode.

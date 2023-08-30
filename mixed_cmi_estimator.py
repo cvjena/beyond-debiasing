@@ -50,11 +50,16 @@ from tensor_utils import (
 )
 
 
-def get_dist_array(data):
-    """Returns pairwise distances for all columns of data measured with the
-    manhattan distance.
+def get_dist_array(data: torch.Tensor) -> torch.Tensor:
+    """Returns pairwise distances for all columns of the input matrix measured
+    with the manhattan distance.
 
-    Variables are represented by COLUMNS, observations by ROWS.
+    Args:
+        data (torch.Tensor): Input matrix. Variables are represented by COLUMNS,
+        observations by ROWS.
+
+    Returns:
+        torch.Tensor: Pairwise (manhattan) distances.
     """
     # Works for 1D and 2d data.
 
@@ -79,7 +84,7 @@ def get_epsilon_distance(k, disArray):
     """Based on a tensor of pairwise distances per observation (tensor is
     three-dimensional, quadratic, symmetric).
     """
-    # data = torch.tensor([[0, 8, 2], [0, 8, 2], [0, 8, 2]])
+
     if disArray.size()[0] == 1:
         disArray = disArray.transpose(dim0=0, dim1=1)
     N = disArray.size()[0]
@@ -115,10 +120,7 @@ def find_inter_cluster(eleInEachClass):
 
 
 def con_entro_estimator(data, k, dN):
-    """Estimates entropy of quantitative data.
-
-    Variables are represented by COLUMNS, observations by ROWS.
-    """
+    """Estimates entropy of quantitative data."""
 
     # If only one row, count the number of columns (= length of the vector).
     if data.size()[0] == 1:
@@ -153,14 +155,28 @@ def con_entro_estimator(data, k, dN):
     return entropy
 
 
-def mixed_entro_estimator(data, dimCon, dimDis, k=0.1):
-    """Estimates the entropie of the mixed variables with the given dimensions.
+def mixed_entro_estimator(
+    data: torch.Tensor, dimCon: torch.Tensor, dimDis: torch.Tensor, k: int = 0.1
+) -> torch.Tensor:
+    """Estimates the entropy of the mixed variables with the given dimensions.
 
+    The data is a matrix where COLUMNS represent variables and ROWS represent
+    observations. dimCon and dimDis contain the indices of which variables are
+    quantitative and which are qualitative.
     Variables are represented by COLUMNS, observations by ROWS.
 
     Args:
-        k (float, optional): Neighborhood size is calculated as
-        max(1, round(k*#all_neighbors)). k should be < 1 and defaults to 0.1.
+        data (torch.Tensor): Data with variables represented as columns and
+            observations represented as rows.
+        dimCon (torch.Tensor): Indices of data for the columns corresponding to
+            quantitative variables.
+        dimDis (torch.Tensor): Indices of data for the columns corresponding to
+            qualitative variables.
+        k (int, optional): Neighborhood size is calculated as
+            max(1, round(k*#all_neighbors)). k should be < 1 and defaults to 0.1.
+
+    Returns:
+        torch.Tensor: Entropy estimate.
     """
 
     # Get number of quantitative variables and number of observations.
@@ -175,7 +191,7 @@ def mixed_entro_estimator(data, dimCon, dimDis, k=0.1):
     if len(dimDis) != 0:
         dataDis = torch.index_select(data, 1, dimDis)
     if len(dimCon) == 0 and len(dimDis) == 0:
-        # print('Input data is NULL!!!')
+        # Input data is null.
         pass
 
     # Calculate the entropie for the extracted data.
@@ -267,7 +283,14 @@ def mixed_entro_estimator(data, dimCon, dimDis, k=0.1):
     return res
 
 
-def _mixed_cmi_model(data, xind, yind, zind, is_categorical, k=0.1):
+def _mixed_cmi_model(
+    data: torch.Tensor,
+    xind: torch.Tensor,
+    yind: torch.Tensor,
+    zind: torch.Tensor,
+    is_categorical: torch.Tensor,
+    k: int = 0.1,
+) -> torch.Tensor:
     """Estimates the CMI from qualitative and quantitative data.
 
     The conditional mutual independence I(X;Y|Z) is -> 0 if X and Y are
@@ -279,28 +302,30 @@ def _mixed_cmi_model(data, xind, yind, zind, is_categorical, k=0.1):
     an Associated Conditional Independence Test. In: Entropy (Basel, Switzerland)
     24 (9). DOI: 10.3390/e24091234.
     The implementation follows their R implementation licensed unter MIT license:
-    https://github.com/leizan/CMIh2022/blob/main/method.R
+        https://github.com/leizan/CMIh2022/blob/main/method.R
 
-    :param data: Observations of the variables x, y, and z. Variables are
-    represented by COLUMNS, observations by ROWS.
-    :param xind: One-dimensional tensor that contains a list of the indices
-    corresponding to the columns of data containing the observations of the
-    variable x.
-    :param yind: One-dimensional tensor that contains a list of the indices
-    corresponding to the columns of data containing the observations of the
-    variable y.
-    :param zind: One-dimensional tensor that contains a list of the indices
-    corresponding to the columns of data containing the observations of the
-    #variable z.
-    :param is_categorical: One-dimensional tensor that contains a list of
-    the indices corresponding to the columns of data that contain qualitative
-    (=categorical) data. All other columns are expected to contain quantitative
-    data.
-    :param k: Neighborhood size for KNN. Calculated as
-    Neighborhood size = max(1, round(k * #All neighbors)).
-    :return: Estimate of the CMI I(X;Y|Z).
-    :rtype: float.
+    Args:
+        data (torch.Tensor): Observations of the variables x, y, and z. Variables are
+            represented by COLUMNS, observations by ROWS.
+        xind (torch.Tensor): One-dimensional tensor that contains a list of the indices
+            corresponding to the columns of data containing the observations of the
+            variable x.
+        yind (torch.Tensor): One-dimensional tensor that contains a list of the indices
+            corresponding to the columns of data containing the observations of the
+            variable y.
+        zind (torch.Tensor): One-dimensional tensor that contains a list of the indices
+            corresponding to the columns of data containing the observations of the
+            variable z.
+        is_categorical (torch.Tensor): One-dimensional tensor that contains a list of
+            the indices corresponding to the columns of data that contain qualitative
+            (=categorical) data. All other columns are expected to contain quantitative
+            data.
+        k (int, optional): Neighborhood size for kNN. Calculated as
+            Neighborhood size = max(1, round(k * #All neighbors)). k should be < 1
+            and defaults to 0.1.
 
+    Returns:
+        torch.Tensor: Estimate of the CMI I(X;Y|Z).
     """
 
     # data: Variables are represented by COLUMNS, obervations by ROWS.
@@ -366,16 +391,27 @@ def _mixed_cmi_model(data, xind, yind, zind, is_categorical, k=0.1):
 
 
 def mixed_cmi_model(
-    feature, output, target, feature_is_categorical, target_is_categorical
-):
-    """Estimates the CMI from qualitative and quantitative data.
+    feature: torch.Tensor,
+    output: torch.Tensor,
+    target: torch.Tensor,
+    feature_is_categorical: bool,
+    target_is_categorical: bool,
+) -> torch.Tensor:
+    """Estimates the CMI for a set of a feature of interest, model output and
+    desired output.
+
+    Estimates the conditional mutual information CMI(feature, output | target).
+    Here, both the feature and the target are allowed to be both qualitative and
+    quantitative variables. The model output has to be quantitative. All input
+    tensors are only allowed to be one-dimensional tensors and describe batched
+    observations.
 
     The conditional mutual information I(X;Y|Z) is -> 0 if X and Y are
-    dissimilar and -> inf if they are similar.
-    Here, the resulting CMI is only differentiable w.r.t. to non-categorical
-    inputs (creating a histogram in a differentiable manner is not really
-    reasonable).
-    All input tensors are only allowed to be one-dimensional tensors.
+    dissimilar and -> inf if they are similar. Please note, that the returned CMI
+    is only differentiable with respect to non-categorical variables, i.e., if
+    you specify one of the three input variables as categorical you cannot
+    differentiate with respect to it afterward. That is, because in this case a
+    histogram is created which cannot be done in a differentiable manner.
 
     Method:
     Zan, Lei; Meynaoui, Anouar; Assaad, Charles K.; Devijver, Emilie; Gaussier,
@@ -384,7 +420,21 @@ def mixed_cmi_model(
     24 (9). DOI: 10.3390/e24091234.
     The implementation follows their R implementation and was adapted for
     differentiability w.r.t. quantitative variables:
-    https://github.com/leizan/CMIh2022/blob/main/method.R
+        https://github.com/leizan/CMIh2022/blob/main/method.R
+
+    Args:
+        feature (torch.Tensor): One-dimensional feature vector.
+        output (torch.Tensor): One-dimensional model output vector.
+        target (torch.Tensor): One-dimensional target vector.
+        feature_is_categorical (bool): Whether the feature is a categorical variable.
+        target_is_categorical (bool): Whether the target is a categorical variable.
+
+    Raises:
+        ValueError: Raised if one of feature, output and target is not a
+            one-dimensional tensor.
+
+    Returns:
+        torch.Tensor: Estimate of CMI(feature, output | target).
     """
 
     if any([z.dim() != 1 for z in (feature, output, target)]):

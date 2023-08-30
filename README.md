@@ -1,7 +1,15 @@
 # Beyond Debiasing: Actively Steering Feature Selection via Loss Regularization
 
-## Overview
+* [Overview](#overview)
+* [Installation](#installation)
+* [Usage in Python](#usage-in-python)
+* [Repository organization](#repository)
+
+## Overview <a name="overview"></a>
+
 This repository provides code to use the method presented in our GCPR 2023 paper **"Beyond Debiasing: Actively Steering Feature Selection via Loss Regularization"**. If you want to get started, take a look at our [example network](regression_network.py) and the corresponding [jupyter notebook](feature_steering_example.ipynb).
+
+If you are only interested in the implementation of the feature steering part of the loss, you can find it in `feat_steering_loss(...)` of [regression_network.py](regression_network.py).
 
 <div align="center">
     <img src="https://git.inf-cv.uni-jena.de/blunk/beyond-debiasing/raw/main/teaser.png" alt="By measuring the feature usage, we can steer the model towards (not) using features that are specifically (un-)desired." width="35%"/>
@@ -18,7 +26,9 @@ If you use our method, please cite:
     year = {2023},
     }
 
-## Installation
+
+## Installation <a name="installation"></a>
+
 **Install with pip, Python and PyTorch 2.0+**
 
     git clone https://git.inf-cv.uni-jena.de/blunk/beyond-debiasing.git
@@ -27,10 +37,16 @@ If you use our method, please cite:
 
 First, create an environment with pip and Python first (Anaconda environment / Python virtual environment). We recommend to install [PyTorch with CUDA support](https://pytorch.org/get-started/locally/). Then, you can install all subsequent packages via pip as described above.
 
-## Usage in Python
+
+## Usage in Python <a name="usage-in-python"></a>
+
 Since our method relies on loss regularization, it is very simple to add to your own networks - you only need to modify your loss function. To help with that, we provide an [exemplary network](regression_network.py) and a [jupyter notebook](feature_steering_example.ipynb) with example code.
 
-## Repository Organization
+You can find the implementation of the feature steering part of the loss in `feat_steering_loss(...)` of [regression_network.py](regression_network.py), which is where all the magic of our method takes place.
+
+
+## Repository <a name="repository"></a>
+
 * Installation:
     * [`requirements.txt`](requirements.txt): List of required packages for installation with pip
 * Feature attribution:
