@@ -4,6 +4,7 @@
 * [Installation](#installation)
 * [Usage in Python](#usage-in-python)
 * [Repository organization](#repository)
+* [License and support](#license-support)
 
 ## Overview <a name="overview"></a>
 
@@ -44,7 +45,6 @@ Since our method relies on loss regularization, it is very simple to add to your
 
 You can find the implementation of the feature steering part of the loss in `feat_steering_loss(...)` of [regression_network.py](regression_network.py), which is where all the magic of our method takes place.
 
-
 ## Repository <a name="repository"></a>
 
 * Installation:
@@ -63,4 +63,8 @@ You can find the implementation of the feature steering part of the loss in `fea
     * [`regression_network.py`](regression_network.py): Neural network (PyTorch) used in the example notebook
 
 With [`mixed_cmi_estimator.py`](mixed_cmi_estimator.py) this repository includes a Python implementation of the hybrid CMI estimator CMIh presented by [Zan et al.](https://doi.org/10.3390/e24091234) The authors' original R implementation can be found [here](https://github.com/leizan/CMIh2022).
+
+
+## License and Support <a name="license-support"></a>
+This repository is released under *CC BY 4.0* license, which allows both academic and commercial use. If you need any support, please open an issue or contact [Jan Blunk](https://inf-cv.uni-jena.de/home/group/blunk/).
 
